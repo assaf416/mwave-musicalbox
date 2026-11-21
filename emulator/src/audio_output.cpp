@@ -1,9 +1,9 @@
 #include "audio_output.h"
-#include <QDebug>
+#include <iostream>
 #include <cmath>
 
-AudioOutput::AudioOutput(QObject *parent)
-  : QObject(parent), sampleRate(0), channels(0), isInitialized(false) {
+AudioOutput::AudioOutput()
+  : sampleRate(0), channels(0), isInitialized(false) {
 }
 
 AudioOutput::~AudioOutput() {
@@ -15,18 +15,20 @@ bool AudioOutput::initialize(int sr, int ch) {
   channels = ch;
   isInitialized = true;
 
-  qDebug() << "AudioOutput initialized: " << sampleRate << "Hz, " << channels << "channels";
+  std::cout << "[AudioOutput] Initialized: " << sampleRate << " Hz, "
+    << channels << " channels\n";
   return true;
 }
 
 void AudioOutput::playTone(double frequency, float amplitude) {
   if (!isInitialized) {
-    qWarning() << "AudioOutput not initialized";
+    std::cerr << "[AudioOutput] Not initialized\n";
     return;
   }
 
   // For now, just log - will implement actual audio generation
-  qDebug() << "Playing tone:" << frequency << "Hz at amplitude" << amplitude;
+  std::cout << "[AudioOutput] Playing tone: " << frequency << " Hz at amplitude "
+    << amplitude << "\n";
 
   // Generate a simple sine wave
   int bufferSize = sampleRate / 10; // 100ms buffer
@@ -40,11 +42,11 @@ void AudioOutput::playTone(double frequency, float amplitude) {
     }
   }
 
-  // Audio playback will be implemented through QAudioOutput or PortAudio
-  qDebug() << "Generated" << bufferSize << "samples for audio playback";
+  // Audio playback will be implemented through PortAudio or other backend
+  std::cout << "[AudioOutput] Generated " << bufferSize << " samples for audio playback\n";
 }
 
 void AudioOutput::stop() {
   audioBuffer.clear();
-  qDebug() << "AudioOutput stopped";
+  std::cout << "[AudioOutput] Stopped\n";
 }

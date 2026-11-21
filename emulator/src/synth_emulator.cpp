@@ -1,33 +1,31 @@
 #include "synth_emulator.h"
 #include "audio_output.h"
-#include <QDebug>
+#include <iostream>
 #include <cmath>
 #include <algorithm>
 
-SynthEmulator::SynthEmulator(QObject *parent)
-  : QObject(parent), audioOut(nullptr), currentInstrument(0), activeVoices(0) {
+SynthEmulator::SynthEmulator()
+  : audioOut(nullptr), currentInstrument(0), activeVoices(0) {
 
   initAudioOutput();
-  qDebug() << "SynthEmulator initialized";
+  std::cout << "[SynthEmulator] Initialized\n";
 }
 
 SynthEmulator::~SynthEmulator() {
-  if (audioOut) {
-    delete audioOut;
-  }
+  // unique_ptr automatically deletes
 }
 
 void SynthEmulator::initAudioOutput() {
-  audioOut = new AudioOutput(this);
+  audioOut = std::make_unique<AudioOutput>();
   if (!audioOut->initialize(44100, 2)) {
-    qWarning() << "Failed to initialize audio output";
+    std::cerr << "[AudioOutput] Initialization failed\n";
   } else {
-    qDebug() << "Audio output initialized successfully";
+    std::cout << "[AudioOutput] Audio output initialized successfully\n";
   }
 }
 
 void SynthEmulator::playNote(int midiNote, int velocity) {
-  qDebug() << "Playing MIDI note:" << midiNote << "velocity:" << velocity;
+  std::cout << "[SynthEmulator] Playing MIDI note: " << midiNote << " velocity: " << velocity << "\n";
 
   // Add to active notes
   if (std::find(activeNotes.begin(), activeNotes.end(), midiNote) == activeNotes.end()) {
@@ -44,30 +42,31 @@ void SynthEmulator::stopNote(int midiNote) {
     activeNotes.erase(it);
     activeVoices = activeNotes.size();
   }
-  qDebug() << "Stopped MIDI note:" << midiNote;
+  std::cout << "[SynthEmulator] Stopped MIDI note: " << midiNote << "\n";
 }
 
 void SynthEmulator::stopAllNotes() {
   activeNotes.clear();
   activeVoices = 0;
+  std::cout << "[SynthEmulator] All notes stopped\n";
 }
 
 void SynthEmulator::setInstrument(int index) {
   currentInstrument = index;
-  qDebug() << "Instrument set to:" << index;
+  std::cout << "[SynthEmulator] Instrument set to: " << index << "\n";
 }
 
 void SynthEmulator::setReverb(float amount) {
   if (audioOut) {
     // Will be implemented in audio effects chain
-    qDebug() << "Reverb set to:" << amount;
+    std::cout << "[Effects] Reverb set to: " << (amount * 100.0f) << "%\n";
   }
 }
 
 void SynthEmulator::setChorus(float amount) {
   if (audioOut) {
     // Will be implemented in audio effects chain
-    qDebug() << "Chorus set to:" << amount;
+    std::cout << "[Effects] Chorus set to: " << (amount * 100.0f) << "%\n";
   }
 }
 
@@ -76,7 +75,7 @@ void SynthEmulator::generateTone(int midiNote, int velocity) {
   // Frequency = 440 * 2^((note - 69) / 12)
   double frequency = 440.0 * std::pow(2.0, (midiNote - 69) / 12.0);
 
-  qDebug() << "Generating tone at" << frequency << "Hz with velocity" << velocity;
+  std::cout << "[Synth] Generating tone at " << frequency << " Hz with velocity " << velocity << "\n";
 
   if (audioOut) {
     // Send to audio output for synthesis

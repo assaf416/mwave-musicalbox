@@ -1,15 +1,12 @@
 #ifndef AUDIO_OUTPUT_H
 #define AUDIO_OUTPUT_H
 
-#include <QObject>
 #include <cstdint>
 #include <vector>
 
-class AudioOutput : public QObject {
-  Q_OBJECT
-
+class AudioOutput {
 public:
-  explicit AudioOutput(QObject *parent = nullptr);
+  AudioOutput();
   ~AudioOutput();
 
   bool initialize(int sampleRate, int channels);

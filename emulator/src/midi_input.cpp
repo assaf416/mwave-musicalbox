@@ -1,8 +1,8 @@
 #include "midi_input.h"
-#include <QDebug>
+#include <iostream>
 
-MidiInput::MidiInput(QObject *parent)
-  : QObject(parent), isListening(false) {
+MidiInput::MidiInput()
+  : isListening(false) {
 }
 
 MidiInput::~MidiInput() {
@@ -10,16 +10,16 @@ MidiInput::~MidiInput() {
 }
 
 bool MidiInput::initialize() {
-  qDebug() << "MIDI Input initialized";
+  std::cout << "[MidiInput] Initialized\n";
   return true;
 }
 
 void MidiInput::startListening() {
   isListening = true;
-  qDebug() << "MIDI Input started listening";
+  std::cout << "[MidiInput] Started listening\n";
 }
 
 void MidiInput::stopListening() {
   isListening = false;
-  qDebug() << "MIDI Input stopped listening";
+  std::cout << "[MidiInput] Stopped listening\n";
 }

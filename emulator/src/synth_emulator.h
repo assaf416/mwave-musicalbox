@@ -1,16 +1,14 @@
 #ifndef SYNTH_EMULATOR_H
 #define SYNTH_EMULATOR_H
 
-#include <QObject>
 #include <vector>
+#include <memory>
 
 class AudioOutput;
 
-class SynthEmulator : public QObject {
-  Q_OBJECT
-
+class SynthEmulator {
 public:
-  explicit SynthEmulator(QObject *parent = nullptr);
+  SynthEmulator();
   ~SynthEmulator();
 
   // Playback control
@@ -32,7 +30,7 @@ private:
   void initAudioOutput();
   void generateTone(int midiNote, int velocity);
 
-  AudioOutput *audioOut;
+  std::unique_ptr<AudioOutput> audioOut;
   int currentInstrument;
   int activeVoices;
   std::vector<int> activeNotes;

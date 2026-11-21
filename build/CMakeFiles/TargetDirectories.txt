@@ -1,0 +1,13 @@
+/home/assaf/projects/mwave-musical-box/build/CMakeFiles/edit_cache.dir
+/home/assaf/projects/mwave-musical-box/build/CMakeFiles/rebuild_cache.dir
+/home/assaf/projects/mwave-musical-box/build/CMakeFiles/list_install_components.dir
+/home/assaf/projects/mwave-musical-box/build/CMakeFiles/install.dir
+/home/assaf/projects/mwave-musical-box/build/CMakeFiles/install/local.dir
+/home/assaf/projects/mwave-musical-box/build/CMakeFiles/install/strip.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/mwave_emulator.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/edit_cache.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/rebuild_cache.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/list_install_components.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/install.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/install/local.dir
+/home/assaf/projects/mwave-musical-box/build/emulator/CMakeFiles/install/strip.dir

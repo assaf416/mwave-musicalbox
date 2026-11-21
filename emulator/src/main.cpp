@@ -1,17 +1,20 @@
-#include <QApplication>
-#include <QDebug>
-#include "ui_window.h"
+#include <iostream>
+#include "synth_emulator.h"
+#include "console_ui.h"
 
 int main(int argc, char *argv[]) {
-  QApplication app(argc, argv);
+  (void)argc;  // Unused
+  (void)argv;  // Unused
 
-  qDebug() << "MWAVE Musical Box - Desktop Emulator";
-  qDebug() << "Starting UI...";
+  std::cout << "Initializing MWAVE Musical Box Emulator...\n";
 
-  UIWindow window;
-  window.setWindowTitle("MWAVE FM-1 & SMK-37 Emulator");
-  window.resize(1024, 768);
-  window.show();
+  // Create synthesizer emulator
+  SynthEmulator synth;
 
-  return app.exec();
+  // Create and run console UI
+  ConsoleUI ui(&synth);
+  ui.run();
+
+  std::cout << "MWAVE Emulator terminated.\n";
+  return 0;
 }
