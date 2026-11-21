@@ -44,3 +44,57 @@ endif()
 
 # Installation
 install(TARGETS mwave_emulator DESTINATION bin)
+
+# Testing
+enable_testing()
+
+# Check if GoogleTest is available
+find_package(GTest QUIET)
+
+if(GTEST_FOUND)
+  # Create library for testable components
+  add_library(mwave_core STATIC
+    src/soundfont_loader.cpp
+    src/melotron_synth.cpp
+    src/audio_output.cpp
+  )
+
+  target_compile_features(mwave_core PRIVATE cxx_std_17)
+  target_include_directories(mwave_core PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/firmware/include
+  )
+
+  # Test executables
+  add_executable(test_sf2_extraction tests/test_sf2_extraction.cpp)
+  target_link_libraries(test_sf2_extraction mwave_core GTest::GTest GTest::Main)
+  target_compile_features(test_sf2_extraction PRIVATE cxx_std_17)
+  target_include_directories(test_sf2_extraction PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/firmware/include
+  )
+
+  add_executable(test_pitch_shifting tests/test_pitch_shifting.cpp)
+  target_link_libraries(test_pitch_shifting mwave_core GTest::GTest GTest::Main)
+  target_compile_features(test_pitch_shifting PRIVATE cxx_std_17)
+  target_include_directories(test_pitch_shifting PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/firmware/include
+  )
+
+  add_executable(test_loop_handling tests/test_loop_handling.cpp)
+  target_link_libraries(test_loop_handling mwave_core GTest::GTest GTest::Main)
+  target_compile_features(test_loop_handling PRIVATE cxx_std_17)
+  target_include_directories(test_loop_handling PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/firmware/include
+  )
+
+  add_test(NAME SF2Extraction COMMAND test_sf2_extraction)
+  add_test(NAME PitchShifting COMMAND test_pitch_shifting)
+  add_test(NAME LoopHandling COMMAND test_loop_handling)
+
+  message(STATUS "GoogleTest found - tests enabled")
+else()
+  message(STATUS "GoogleTest not found - tests disabled (install libgtest-dev to enable)")
+endif()
