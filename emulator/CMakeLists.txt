@@ -7,6 +7,8 @@ set(EMULATOR_SOURCES
   src/midi_input.cpp
   src/audio_output.cpp
   src/console_ui.cpp
+  src/soundfont_loader.cpp
+  src/melotron_synth.cpp
 )
 
 set(EMULATOR_HEADERS
@@ -14,6 +16,8 @@ set(EMULATOR_HEADERS
   src/midi_input.h
   src/audio_output.h
   src/console_ui.h
+  src/soundfont_loader.h
+  src/melotron_synth.h
 )
 
 # Executable

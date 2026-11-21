@@ -132,9 +132,10 @@ emulator/CMakeFiles/mwave_emulator.dir/src/synth_emulator.cpp.o: \
  /usr/include/c++/14/pstl/glue_memory_defs.h \
  /usr/include/c++/14/pstl/execution_defs.h \
  /home/assaf/projects/mwave-musical-box/emulator/src/audio_output.h \
- /usr/include/c++/14/cstdint /usr/include/c++/14/iostream \
- /usr/include/c++/14/ostream /usr/include/c++/14/ios \
- /usr/include/c++/14/bits/char_traits.h \
+ /usr/include/c++/14/cstdint \
+ /home/assaf/projects/mwave-musical-box/emulator/src/melotron_synth.h \
+ /usr/include/c++/14/iostream /usr/include/c++/14/ostream \
+ /usr/include/c++/14/ios /usr/include/c++/14/bits/char_traits.h \
  /usr/include/c++/14/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/14/bits/c++locale.h \
  /usr/include/c++/14/clocale /usr/include/locale.h \

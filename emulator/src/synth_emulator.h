@@ -5,6 +5,7 @@
 #include <memory>
 
 class AudioOutput;
+class MelotronSynth;
 
 class SynthEmulator {
 public:
@@ -31,9 +32,11 @@ private:
   void generateTone(int midiNote, int velocity);
 
   std::unique_ptr<AudioOutput> audioOut;
+  std::unique_ptr<MelotronSynth> melotron;
   int currentInstrument;
   int activeVoices;
   std::vector<int> activeNotes;
+  bool melotronInitialized;
 };
 
 #endif // SYNTH_EMULATOR_H

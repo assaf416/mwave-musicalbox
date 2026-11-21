@@ -142,13 +142,43 @@ emulator/CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.s"
 	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/assaf/projects/mwave-musical-box/emulator/src/console_ui.cpp -o CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.s
 
+emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o: emulator/CMakeFiles/mwave_emulator.dir/flags.make
+emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o: /home/assaf/projects/mwave-musical-box/emulator/src/soundfont_loader.cpp
+emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o: emulator/CMakeFiles/mwave_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/assaf/projects/mwave-musical-box/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o"
+	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o -MF CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o.d -o CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o -c /home/assaf/projects/mwave-musical-box/emulator/src/soundfont_loader.cpp
+
+emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.i"
+	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/assaf/projects/mwave-musical-box/emulator/src/soundfont_loader.cpp > CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.i
+
+emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.s"
+	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/assaf/projects/mwave-musical-box/emulator/src/soundfont_loader.cpp -o CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.s
+
+emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o: emulator/CMakeFiles/mwave_emulator.dir/flags.make
+emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o: /home/assaf/projects/mwave-musical-box/emulator/src/melotron_synth.cpp
+emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o: emulator/CMakeFiles/mwave_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/assaf/projects/mwave-musical-box/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o"
+	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o -MF CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o.d -o CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o -c /home/assaf/projects/mwave-musical-box/emulator/src/melotron_synth.cpp
+
+emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.i"
+	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/assaf/projects/mwave-musical-box/emulator/src/melotron_synth.cpp > CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.i
+
+emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.s"
+	cd /home/assaf/projects/mwave-musical-box/build/emulator && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/assaf/projects/mwave-musical-box/emulator/src/melotron_synth.cpp -o CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.s
+
 # Object files for target mwave_emulator
 mwave_emulator_OBJECTS = \
 "CMakeFiles/mwave_emulator.dir/src/main.cpp.o" \
 "CMakeFiles/mwave_emulator.dir/src/synth_emulator.cpp.o" \
 "CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.o" \
 "CMakeFiles/mwave_emulator.dir/src/audio_output.cpp.o" \
-"CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o"
+"CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o" \
+"CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o" \
+"CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o"
 
 # External object files for target mwave_emulator
 mwave_emulator_EXTERNAL_OBJECTS =
@@ -158,10 +188,12 @@ emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/src/synth_emulat
 emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.o
 emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/src/audio_output.cpp.o
 emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o
+emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o
+emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o
 emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/build.make
 emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/compiler_depend.ts
 emulator/mwave_emulator: emulator/CMakeFiles/mwave_emulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/assaf/projects/mwave-musical-box/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable mwave_emulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/assaf/projects/mwave-musical-box/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable mwave_emulator"
 	cd /home/assaf/projects/mwave-musical-box/build/emulator && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mwave_emulator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

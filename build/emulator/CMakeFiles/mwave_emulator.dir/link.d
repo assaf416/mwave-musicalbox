@@ -7,6 +7,8 @@ mwave_emulator: \
   CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.o \
   CMakeFiles/mwave_emulator.dir/src/audio_output.cpp.o \
   CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o \
+  CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o \
+  CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o \
   /usr/lib/gcc/x86_64-linux-gnu/14/libstdc++.so \
   /usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/libm.so \
   /usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/libm.so \
@@ -50,6 +52,10 @@ CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.o:
 CMakeFiles/mwave_emulator.dir/src/audio_output.cpp.o:
 
 CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o:
+
+CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o:
+
+CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o:
 
 /usr/lib/gcc/x86_64-linux-gnu/14/libstdc++.so:
 

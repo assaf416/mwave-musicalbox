@@ -247,6 +247,30 @@ src/main.cpp.s:
 	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/melotron_synth.o: src/melotron_synth.cpp.o
+.PHONY : src/melotron_synth.o
+
+# target to build an object file
+src/melotron_synth.cpp.o:
+	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o
+.PHONY : src/melotron_synth.cpp.o
+
+src/melotron_synth.i: src/melotron_synth.cpp.i
+.PHONY : src/melotron_synth.i
+
+# target to preprocess a source file
+src/melotron_synth.cpp.i:
+	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.i
+.PHONY : src/melotron_synth.cpp.i
+
+src/melotron_synth.s: src/melotron_synth.cpp.s
+.PHONY : src/melotron_synth.s
+
+# target to generate assembly for a file
+src/melotron_synth.cpp.s:
+	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.s
+.PHONY : src/melotron_synth.cpp.s
+
 src/midi_input.o: src/midi_input.cpp.o
 .PHONY : src/midi_input.o
 
@@ -270,6 +294,30 @@ src/midi_input.s: src/midi_input.cpp.s
 src/midi_input.cpp.s:
 	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.s
 .PHONY : src/midi_input.cpp.s
+
+src/soundfont_loader.o: src/soundfont_loader.cpp.o
+.PHONY : src/soundfont_loader.o
+
+# target to build an object file
+src/soundfont_loader.cpp.o:
+	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o
+.PHONY : src/soundfont_loader.cpp.o
+
+src/soundfont_loader.i: src/soundfont_loader.cpp.i
+.PHONY : src/soundfont_loader.i
+
+# target to preprocess a source file
+src/soundfont_loader.cpp.i:
+	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.i
+.PHONY : src/soundfont_loader.cpp.i
+
+src/soundfont_loader.s: src/soundfont_loader.cpp.s
+.PHONY : src/soundfont_loader.s
+
+# target to generate assembly for a file
+src/soundfont_loader.cpp.s:
+	cd /home/assaf/projects/mwave-musical-box/build && $(MAKE) $(MAKESILENT) -f emulator/CMakeFiles/mwave_emulator.dir/build.make emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.s
+.PHONY : src/soundfont_loader.cpp.s
 
 src/synth_emulator.o: src/synth_emulator.cpp.o
 .PHONY : src/synth_emulator.o
@@ -317,9 +365,15 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/melotron_synth.o"
+	@echo "... src/melotron_synth.i"
+	@echo "... src/melotron_synth.s"
 	@echo "... src/midi_input.o"
 	@echo "... src/midi_input.i"
 	@echo "... src/midi_input.s"
+	@echo "... src/soundfont_loader.o"
+	@echo "... src/soundfont_loader.i"
+	@echo "... src/soundfont_loader.s"
 	@echo "... src/synth_emulator.o"
 	@echo "... src/synth_emulator.i"
 	@echo "... src/synth_emulator.s"

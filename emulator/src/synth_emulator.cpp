@@ -1,13 +1,25 @@
 #include "synth_emulator.h"
 #include "audio_output.h"
+#include "melotron_synth.h"
 #include <iostream>
 #include <cmath>
 #include <algorithm>
 
 SynthEmulator::SynthEmulator()
-  : audioOut(nullptr), currentInstrument(0), activeVoices(0) {
+  : audioOut(nullptr), melotron(nullptr), currentInstrument(0),
+    activeVoices(0), melotronInitialized(false) {
 
   initAudioOutput();
+
+  // Initialize Melotron with SoundFont2
+  melotron = std::make_unique<MelotronSynth>();
+  if (melotron->initialize("./sf2-files/Mellotron.sf2")) {
+    melotronInitialized = true;
+    std::cout << "[SynthEmulator] Melotron initialized successfully\n";
+  } else {
+    std::cout << "[SynthEmulator] Warning: Melotron initialization failed\n";
+  }
+
   std::cout << "[SynthEmulator] Initialized\n";
 }
 
@@ -27,6 +39,13 @@ void SynthEmulator::initAudioOutput() {
 void SynthEmulator::playNote(int midiNote, int velocity) {
   std::cout << "[SynthEmulator] Playing MIDI note: " << midiNote << " velocity: " << velocity << "\n";
 
+  // Route to Melotron if selected
+  if (currentInstrument == 3 && melotronInitialized && melotron) {
+    melotron->playNote((uint8_t)midiNote, (uint8_t)velocity);
+    activeVoices = melotron->getActiveVoiceCount();
+    return;
+  }
+
   // Add to active notes
   if (std::find(activeNotes.begin(), activeNotes.end(), midiNote) == activeNotes.end()) {
     activeNotes.push_back(midiNote);
@@ -37,6 +56,12 @@ void SynthEmulator::playNote(int midiNote, int velocity) {
 }
 
 void SynthEmulator::stopNote(int midiNote) {
+  if (currentInstrument == 3 && melotronInitialized && melotron) {
+    melotron->stopNote((uint8_t)midiNote);
+    activeVoices = melotron->getActiveVoiceCount();
+    return;
+  }
+
   auto it = std::find(activeNotes.begin(), activeNotes.end(), midiNote);
   if (it != activeNotes.end()) {
     activeNotes.erase(it);
@@ -46,6 +71,13 @@ void SynthEmulator::stopNote(int midiNote) {
 }
 
 void SynthEmulator::stopAllNotes() {
+  if (currentInstrument == 3 && melotronInitialized && melotron) {
+    melotron->stopAllNotes();
+    activeVoices = 0;
+    std::cout << "[SynthEmulator] All Melotron notes stopped\n";
+    return;
+  }
+
   activeNotes.clear();
   activeVoices = 0;
   std::cout << "[SynthEmulator] All notes stopped\n";

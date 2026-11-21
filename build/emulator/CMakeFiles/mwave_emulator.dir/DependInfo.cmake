@@ -11,7 +11,9 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/assaf/projects/mwave-musical-box/emulator/src/audio_output.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/audio_output.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/audio_output.cpp.o.d"
   "/home/assaf/projects/mwave-musical-box/emulator/src/console_ui.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/console_ui.cpp.o.d"
   "/home/assaf/projects/mwave-musical-box/emulator/src/main.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/main.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/main.cpp.o.d"
+  "/home/assaf/projects/mwave-musical-box/emulator/src/melotron_synth.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/melotron_synth.cpp.o.d"
   "/home/assaf/projects/mwave-musical-box/emulator/src/midi_input.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/midi_input.cpp.o.d"
+  "/home/assaf/projects/mwave-musical-box/emulator/src/soundfont_loader.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/soundfont_loader.cpp.o.d"
   "/home/assaf/projects/mwave-musical-box/emulator/src/synth_emulator.cpp" "emulator/CMakeFiles/mwave_emulator.dir/src/synth_emulator.cpp.o" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/src/synth_emulator.cpp.o.d"
   "" "emulator/mwave_emulator" "gcc" "emulator/CMakeFiles/mwave_emulator.dir/link.d"
   )
