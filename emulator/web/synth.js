@@ -53,6 +53,166 @@ const instrumentSettings = {
     4: { name: 'Synth Pad', attack: 0.2, sustain: 1.0, timbre: 1.0 }
 };
 
+// Presets storage
+let allPresets = [];
+let currentPresetId = null;
+
+// Load presets from JSON file
+async function loadPresets() {
+    try {
+        const response = await fetch('presets.json');
+        const data = await response.json();
+        allPresets = data.presets;
+        populatePresetDropdown();
+        console.log(`✓ Loaded ${allPresets.length} presets`);
+    } catch (error) {
+        console.error('Failed to load presets:', error);
+    }
+}
+
+// Populate preset dropdown
+function populatePresetDropdown() {
+    const dropdown = document.getElementById('presetSelector');
+    if (!dropdown) return;
+
+    dropdown.innerHTML = '<option value="">-- Select a Preset --</option>';
+
+    // Group presets by instrument
+    const mellotronPresets = allPresets.filter(p => p.instrument === 'Melotron');
+    const organPresets = allPresets.filter(p => p.instrument === 'Organ');
+    const pianoPresets = allPresets.filter(p => p.instrument === 'Piano');
+    const epPresets = allPresets.filter(p => p.instrument === 'Electric Piano');
+
+    if (mellotronPresets.length > 0) {
+        const group = document.createElement('optgroup');
+        group.label = '🎺 Mellotron Presets';
+        mellotronPresets.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.id;
+            option.textContent = `${p.name} (${p.artist})`;
+            group.appendChild(option);
+        });
+        dropdown.appendChild(group);
+    }
+
+    if (organPresets.length > 0) {
+        const group = document.createElement('optgroup');
+        group.label = '🎹 Organ Presets';
+        organPresets.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.id;
+            option.textContent = `${p.name} (${p.artist})`;
+            group.appendChild(option);
+        });
+        dropdown.appendChild(group);
+    }
+
+    if (pianoPresets.length > 0) {
+        const group = document.createElement('optgroup');
+        group.label = '🎼 Piano Presets';
+        pianoPresets.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.id;
+            option.textContent = `${p.name} (${p.artist})`;
+            group.appendChild(option);
+        });
+        dropdown.appendChild(group);
+    }
+
+    if (epPresets.length > 0) {
+        const group = document.createElement('optgroup');
+        group.label = '⚡ Electric Piano Presets';
+        epPresets.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.id;
+            option.textContent = `${p.name} (${p.artist})`;
+            group.appendChild(option);
+        });
+        dropdown.appendChild(group);
+    }
+}
+
+// Apply a preset to the synthesizer
+function applyPreset(presetId) {
+    const preset = allPresets.find(p => p.id === presetId);
+    if (!preset) return;
+
+    currentPresetId = presetId;
+    const s = preset.settings;
+
+    // Apply instrument
+    const instrumentMap = { 'Piano': 0, 'Electric Piano': 1, 'Organ': 2, 'Melotron': 3, 'Synth Pad': 4 };
+    const instIndex = instrumentMap[preset.instrument] || 3;
+    document.getElementById('instrument').value = instIndex;
+    changeInstrument();
+
+    // Apply waveform
+    if (s.waveform) {
+        document.getElementById('waveform').value = s.waveform;
+        changeWaveform();
+    }
+
+    // Apply master volume
+    document.getElementById('volume').value = s.masterVolume;
+    updateVolume();
+
+    // Apply reverb
+    document.getElementById('reverb').value = s.reverb;
+    updateReverb();
+
+    // Apply decay time
+    document.getElementById('decay').value = s.decayTime;
+    updateDecay();
+
+    // Apply knobs (CC20-CC35)
+    const knobMap = {
+        'cc20_filter': 0, 'cc21_resonance': 1, 'cc22_attack': 2, 'cc23_decay': 3,
+        'cc24_sustain': 4, 'cc25_release': 5, 'cc26_lfo_amt': 6, 'cc27_lfo_rate': 7,
+        'cc28_vibrato': 8, 'cc29_tremolo': 9, 'cc30_pan': 10, 'cc31_tuning': 11,
+        'cc32_env_amt': 12, 'cc33_chorus': 13, 'cc34_phaser': 14, 'cc35_delay': 15
+    };
+
+    Object.entries(s.knobs).forEach(([ccName, value]) => {
+        const knobIndex = knobMap[ccName];
+        if (knobIndex !== undefined) {
+            knobValues[knobIndex] = value;
+            const knob = document.getElementById(`knob${knobIndex}`);
+            if (knob) {
+                knob.style.setProperty('--rotation', value * 3.6);
+                const valDisplay = document.getElementById(`knob${knobIndex}Val`);
+                if (valDisplay) valDisplay.textContent = Math.round(value) + '%';
+            }
+        }
+    });
+
+    // Apply faders (CC36-CC43)
+    if (s.faders) {
+        s.faders.forEach((value, index) => {
+            const fader = document.getElementById(`fader${index}`);
+            if (fader) {
+                fader.value = value;
+                faderValues[index] = value;
+            }
+        });
+    }
+
+    // Show preset info
+    const presetInfo = document.getElementById('presetInfo');
+    if (presetInfo) {
+        presetInfo.innerHTML = `<strong>${preset.name}</strong><br><small>${preset.artist}</small><br><em>${preset.description}</em>`;
+    }
+
+    console.log(`✓ Applied preset: ${preset.name} (${preset.artist})`);
+}
+
+// Handle preset selection
+function handlePresetChange() {
+    const presetId = document.getElementById('presetSelector').value;
+    if (presetId) {
+        applyPreset(presetId);
+    }
+}
+
 // Initialize keyboard
 function initKeyboard() {
     const keyboard = document.getElementById('keyboard');
@@ -390,6 +550,7 @@ function updateScreenWhenNotesChange() {
 
 // Initialize everything
 window.addEventListener('DOMContentLoaded', () => {
+    loadPresets();
     initKeyboard();
     initKnobs();
     updateVolume();

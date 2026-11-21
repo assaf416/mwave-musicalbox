@@ -1,0 +1,453 @@
+{
+  "version": "1.0",
+  "presets": [
+    {
+      "id": "mellotron_firth_of_fifth",
+      "name": "Firth of Fifth",
+      "artist": "Genesis",
+      "instrument": "Melotron",
+      "description": "Mellotron flute and strings - Tony Banks' iconic mellotron intro",
+      "settings": {
+        "masterVolume": 75,
+        "reverb": 65,
+        "decayTime": 1.2,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 70,
+          "cc21_resonance": 40,
+          "cc22_attack": 20,
+          "cc23_decay": 50,
+          "cc24_sustain": 85,
+          "cc25_release": 60,
+          "cc26_lfo_amt": 15,
+          "cc27_lfo_rate": 25,
+          "cc28_vibrato": 35,
+          "cc29_tremolo": 20,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 30,
+          "cc33_chorus": 40,
+          "cc34_phaser": 25,
+          "cc35_delay": 10
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "mellotron_roundabout",
+      "name": "Roundabout",
+      "artist": "Yes",
+      "instrument": "Melotron",
+      "description": "Mellotron orchestral strings - Yes' symphonic masterpiece",
+      "settings": {
+        "masterVolume": 78,
+        "reverb": 70,
+        "decayTime": 1.5,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 65,
+          "cc21_resonance": 50,
+          "cc22_attack": 30,
+          "cc23_decay": 55,
+          "cc24_sustain": 80,
+          "cc25_release": 70,
+          "cc26_lfo_amt": 20,
+          "cc27_lfo_rate": 20,
+          "cc28_vibrato": 40,
+          "cc29_tremolo": 25,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 40,
+          "cc33_chorus": 50,
+          "cc34_phaser": 30,
+          "cc35_delay": 15
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "mellotron_owner_of_lonely_heart",
+      "name": "Owner of a Lonely Heart",
+      "artist": "Yes",
+      "instrument": "Melotron",
+      "description": "Mellotron synth pads - Modern Yes synth-rock era",
+      "settings": {
+        "masterVolume": 72,
+        "reverb": 55,
+        "decayTime": 0.8,
+        "waveform": "triangle",
+        "knobs": {
+          "cc20_filter": 55,
+          "cc21_resonance": 35,
+          "cc22_attack": 40,
+          "cc23_decay": 45,
+          "cc24_sustain": 75,
+          "cc25_release": 50,
+          "cc26_lfo_amt": 25,
+          "cc27_lfo_rate": 30,
+          "cc28_vibrato": 45,
+          "cc29_tremolo": 30,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 35,
+          "cc33_chorus": 60,
+          "cc34_phaser": 40,
+          "cc35_delay": 20
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "mellotron_selling_england",
+      "name": "Selling England by the Pound",
+      "artist": "Genesis",
+      "instrument": "Melotron",
+      "description": "Mellotron flute with orchestral backing - Genesis pastoral epic",
+      "settings": {
+        "masterVolume": 76,
+        "reverb": 68,
+        "decayTime": 1.3,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 72,
+          "cc21_resonance": 45,
+          "cc22_attack": 25,
+          "cc23_decay": 52,
+          "cc24_sustain": 82,
+          "cc25_release": 65,
+          "cc26_lfo_amt": 18,
+          "cc27_lfo_rate": 22,
+          "cc28_vibrato": 38,
+          "cc29_tremolo": 22,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 32,
+          "cc33_chorus": 45,
+          "cc34_phaser": 28,
+          "cc35_delay": 12
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "mellotron_and_you_and_i",
+      "name": "And You and I",
+      "artist": "Yes",
+      "instrument": "Melotron",
+      "description": "Mellotron strings and choirs - Yes' celestial arrangement",
+      "settings": {
+        "masterVolume": 74,
+        "reverb": 72,
+        "decayTime": 1.4,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 68,
+          "cc21_resonance": 48,
+          "cc22_attack": 35,
+          "cc23_decay": 58,
+          "cc24_sustain": 85,
+          "cc25_release": 72,
+          "cc26_lfo_amt": 22,
+          "cc27_lfo_rate": 18,
+          "cc28_vibrato": 42,
+          "cc29_tremolo": 28,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 38,
+          "cc33_chorus": 55,
+          "cc34_phaser": 32,
+          "cc35_delay": 18
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_smoke_on_water",
+      "name": "Smoke on the Water",
+      "artist": "Deep Purple",
+      "instrument": "Organ",
+      "description": "Hammond B3 organ - Ritchie Blackmore's heavy rock riff",
+      "settings": {
+        "masterVolume": 85,
+        "reverb": 50,
+        "decayTime": 0.6,
+        "waveform": "square",
+        "knobs": {
+          "cc20_filter": 60,
+          "cc21_resonance": 60,
+          "cc22_attack": 15,
+          "cc23_decay": 40,
+          "cc24_sustain": 90,
+          "cc25_release": 40,
+          "cc26_lfo_amt": 10,
+          "cc27_lfo_rate": 35,
+          "cc28_vibrato": 50,
+          "cc29_tremolo": 55,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 20,
+          "cc33_chorus": 65,
+          "cc34_phaser": 35,
+          "cc35_delay": 5
+        },
+        "faders": [70, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_highway_star",
+      "name": "Highway Star",
+      "artist": "Deep Purple",
+      "instrument": "Organ",
+      "description": "Hammond B3 with Leslie speaker - Jon Lord's signature sound",
+      "settings": {
+        "masterVolume": 82,
+        "reverb": 55,
+        "decayTime": 0.65,
+        "waveform": "square",
+        "knobs": {
+          "cc20_filter": 65,
+          "cc21_resonance": 55,
+          "cc22_attack": 12,
+          "cc23_decay": 38,
+          "cc24_sustain": 88,
+          "cc25_release": 42,
+          "cc26_lfo_amt": 15,
+          "cc27_lfo_rate": 40,
+          "cc28_vibrato": 55,
+          "cc29_tremolo": 60,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 25,
+          "cc33_chorus": 70,
+          "cc34_phaser": 40,
+          "cc35_delay": 8
+        },
+        "faders": [75, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_toccata",
+      "name": "Toccata (Emerson's Touch)",
+      "artist": "ELP",
+      "instrument": "Organ",
+      "description": "Grand Hammond B3 - Keith Emerson's virtuosic masterpiece",
+      "settings": {
+        "masterVolume": 80,
+        "reverb": 60,
+        "decayTime": 0.7,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 70,
+          "cc21_resonance": 50,
+          "cc22_attack": 10,
+          "cc23_decay": 35,
+          "cc24_sustain": 85,
+          "cc25_release": 45,
+          "cc26_lfo_amt": 20,
+          "cc27_lfo_rate": 32,
+          "cc28_vibrato": 48,
+          "cc29_tremolo": 50,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 30,
+          "cc33_chorus": 60,
+          "cc34_phaser": 45,
+          "cc35_delay": 15
+        },
+        "faders": [80, 60, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_pictures_exhibition",
+      "name": "Pictures at an Exhibition",
+      "artist": "ELP",
+      "instrument": "Organ",
+      "description": "Powerful Hammond B3 tone - Emerson's arrangement of Mussorgsky",
+      "settings": {
+        "masterVolume": 83,
+        "reverb": 65,
+        "decayTime": 0.75,
+        "waveform": "square",
+        "knobs": {
+          "cc20_filter": 68,
+          "cc21_resonance": 58,
+          "cc22_attack": 8,
+          "cc23_decay": 42,
+          "cc24_sustain": 90,
+          "cc25_release": 50,
+          "cc26_lfo_amt": 18,
+          "cc27_lfo_rate": 28,
+          "cc28_vibrato": 52,
+          "cc29_tremolo": 58,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 35,
+          "cc33_chorus": 65,
+          "cc34_phaser": 48,
+          "cc35_delay": 12
+        },
+        "faders": [85, 70, 50, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_owner_heart_yes",
+      "name": "Owner of a Lonely Heart (Yes)",
+      "artist": "Yes",
+      "instrument": "Organ",
+      "description": "Warm, modern organ tone - Yes' '80s synth-rock era",
+      "settings": {
+        "masterVolume": 76,
+        "reverb": 50,
+        "decayTime": 0.6,
+        "waveform": "triangle",
+        "knobs": {
+          "cc20_filter": 55,
+          "cc21_resonance": 40,
+          "cc22_attack": 20,
+          "cc23_decay": 45,
+          "cc24_sustain": 80,
+          "cc25_release": 50,
+          "cc26_lfo_amt": 25,
+          "cc27_lfo_rate": 35,
+          "cc28_vibrato": 45,
+          "cc29_tremolo": 35,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 30,
+          "cc33_chorus": 65,
+          "cc34_phaser": 40,
+          "cc35_delay": 18
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_echoes",
+      "name": "Echoes",
+      "artist": "Pink Floyd",
+      "instrument": "Organ",
+      "description": "Dreamy organ with effects - Pink Floyd's experimental soundscape",
+      "settings": {
+        "masterVolume": 68,
+        "reverb": 85,
+        "decayTime": 1.2,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 45,
+          "cc21_resonance": 30,
+          "cc22_attack": 60,
+          "cc23_decay": 70,
+          "cc24_sustain": 70,
+          "cc25_release": 80,
+          "cc26_lfo_amt": 40,
+          "cc27_lfo_rate": 15,
+          "cc28_vibrato": 55,
+          "cc29_tremolo": 40,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 50,
+          "cc33_chorus": 75,
+          "cc34_phaser": 60,
+          "cc35_delay": 50
+        },
+        "faders": [40, 30, 20, 10, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "organ_shine_on",
+      "name": "Shine On You Crazy Diamond",
+      "artist": "Pink Floyd",
+      "instrument": "Organ",
+      "description": "Smooth organ tone with ambient effects - Pink Floyd's tribute",
+      "settings": {
+        "masterVolume": 72,
+        "reverb": 80,
+        "decayTime": 1.1,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 50,
+          "cc21_resonance": 35,
+          "cc22_attack": 55,
+          "cc23_decay": 65,
+          "cc24_sustain": 75,
+          "cc25_release": 75,
+          "cc26_lfo_amt": 35,
+          "cc27_lfo_rate": 18,
+          "cc28_vibrato": 50,
+          "cc29_tremolo": 38,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 45,
+          "cc33_chorus": 70,
+          "cc34_phaser": 55,
+          "cc35_delay": 45
+        },
+        "faders": [35, 25, 15, 5, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "piano_genesis",
+      "name": "Genesis Piano",
+      "artist": "Genesis",
+      "instrument": "Piano",
+      "description": "Soft piano intro - Tony Banks' signature touch",
+      "settings": {
+        "masterVolume": 70,
+        "reverb": 60,
+        "decayTime": 1.0,
+        "waveform": "sine",
+        "knobs": {
+          "cc20_filter": 75,
+          "cc21_resonance": 30,
+          "cc22_attack": 40,
+          "cc23_decay": 50,
+          "cc24_sustain": 60,
+          "cc25_release": 70,
+          "cc26_lfo_amt": 5,
+          "cc27_lfo_rate": 10,
+          "cc28_vibrato": 20,
+          "cc29_tremolo": 10,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 15,
+          "cc33_chorus": 30,
+          "cc34_phaser": 15,
+          "cc35_delay": 20
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "id": "electric_piano_yes",
+      "name": "Yes Electric Piano",
+      "artist": "Yes",
+      "instrument": "Electric Piano",
+      "description": "Fender Rhodes tone - Rick Wakeman's sophisticated touch",
+      "settings": {
+        "masterVolume": 73,
+        "reverb": 55,
+        "decayTime": 0.9,
+        "waveform": "triangle",
+        "knobs": {
+          "cc20_filter": 60,
+          "cc21_resonance": 40,
+          "cc22_attack": 15,
+          "cc23_decay": 48,
+          "cc24_sustain": 70,
+          "cc25_release": 60,
+          "cc26_lfo_amt": 15,
+          "cc27_lfo_rate": 25,
+          "cc28_vibrato": 35,
+          "cc29_tremolo": 25,
+          "cc30_pan": 50,
+          "cc31_tuning": 50,
+          "cc32_env_amt": 25,
+          "cc33_chorus": 45,
+          "cc34_phaser": 25,
+          "cc35_delay": 15
+        },
+        "faders": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    }
+  ]
+}

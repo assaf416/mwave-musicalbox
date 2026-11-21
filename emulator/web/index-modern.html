@@ -729,6 +729,16 @@
             <!-- RIGHT PANEL -->
             <div class="right-panel">
                 <div class="panel-section">
+                    <div class="panel-title">⭐ Presets</div>
+                    <select id="presetSelector" onchange="handlePresetChange()" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                        <option value="">-- Select a Preset --</option>
+                    </select>
+                    <div id="presetInfo" style="color: #00ff88; font-size: 0.75em; padding: 8px; background: rgba(0, 255, 136, 0.05); border: 1px solid #00ff88; border-radius: 5px; text-align: center; min-height: 50px; display: flex; align-items: center; justify-content: center;">
+                        <span style="opacity: 0.6;">Select a preset to load famous sounds</span>
+                    </div>
+                </div>
+
+                <div class="panel-section">
                     <div class="panel-title">🎵 Instrument</div>
                     <select id="instrument" onchange="changeInstrument()">
                         <option value="0">Piano</option>
