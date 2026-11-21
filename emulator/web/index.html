@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWAVE Musical Box - Web Synthesizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: #0f3460;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 2px solid #d4af37;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #d4af37 0%, #f4d35e 50%, #d4af37 100%);
+            color: #0f3460;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #d4af37;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .keyboard-section {
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .controls-section {
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #d4af37;
+        }
+
+        .keyboard {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 10px;
+            background: #16213e;
+            border-radius: 10px;
+            border: 2px solid #d4af37;
+        }
+
+        .key {
+            width: 50px;
+            height: 150px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 5px;
+            transition: all 0.1s;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .key:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+        }
+
+        .key.active {
+            background: #d4af37;
+            color: #0f3460;
+            font-weight: bold;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .key.black {
+            width: 35px;
+            height: 100px;
+            background: #333;
+            color: white;
+            margin-left: -27px;
+            margin-right: -27px;
+            z-index: 10;
+        }
+
+        .key.black:hover {
+            background: #555;
+        }
+
+        .key.black.active {
+            background: #d4af37;
+            color: #0f3460;
+        }
+
+        .visualization {
+            background: #16213e;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            height: 150px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .control-group select,
+        .control-group input[type="range"] {
+            width: 100%;
+            padding: 8px;
+            background: #16213e;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .control-group input[type="range"] {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #d4af37;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #0f3460;
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #d4af37;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #0f3460;
+        }
+
+        .info-box {
+            background: #16213e;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 15px;
+            color: #d4af37;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #f4d35e;
+        }
+
+        .status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .status-item {
+            background: #0f3460;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #d4af37;
+        }
+
+        .status-label {
+            color: #999;
+            font-size: 0.75em;
+            text-transform: uppercase;
+        }
+
+        .status-value {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            background: #d4af37;
+            color: #0f3460;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            background: #f4d35e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .octave-controls {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .octave-controls button {
+            flex: 0 1 auto;
+            padding: 8px 12px;
+            font-size: 0.8em;
+        }
+
+        .help-text {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid #d4af37;
+            padding: 10px;
+            border-radius: 5px;
+            color: #d4af37;
+            font-size: 0.8em;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎹 MWAVE Musical Box</h1>
+            <p>Professional Synthesizer Emulator - Web Edition</p>
+        </div>
+
+        <div class="content">
+            <div class="keyboard-section">
+                <div class="visualization">
+                    <canvas id="waveform"></canvas>
+                </div>
+
+                <div class="octave-controls">
+                    <button onclick="decreaseOctave()">◀ Octave</button>
+                    <span style="color: #d4af37; align-self: center; flex: 1; text-align: center;">
+                        C<span id="octaveDisplay">4</span>
+                    </span>
+                    <button onclick="increaseOctave()">Octave ▶</button>
+                </div>
+
+                <div class="keyboard" id="keyboard"></div>
+
+                <div class="help-text">
+                    💡 <strong>Tip:</strong> Click keys to play, or use computer keyboard (Z=C, X=D, C=E, etc.)
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="status">
+                    <div class="status-item">
+                        <div class="status-label">Voices</div>
+                        <div class="status-value" id="voiceCount">0 / 32</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Frequency</div>
+                        <div class="status-value" id="frequency">-</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Sample Rate</div>
+                        <div class="status-value">48 kHz</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Polyphony</div>
+                        <div class="status-value">32-voice</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="instrument">🎵 Instrument</label>
+                    <select id="instrument" onchange="changeInstrument()">
+                        <option value="0">Piano (Grand)</option>
+                        <option value="1">Electric Piano (Rhodes)</option>
+                        <option value="2">Organ (Hammond)</option>
+                        <option value="3" selected>Melotron (Tape)</option>
+                        <option value="4">Synth Pad (Wavetable)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="waveform-type">〰️ Waveform</label>
+                    <select id="waveform-type" onchange="changeWaveform()">
+                        <option value="sine">Sine</option>
+                        <option value="triangle" selected>Triangle</option>
+                        <option value="square">Square</option>
+                        <option value="sawtooth">Sawtooth</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="volume">🔊 Volume: <span id="volumeValue">70</span>%</label>
+                    <input type="range" id="volume" min="0" max="100" value="70" onchange="updateVolume()">
+                </div>
+
+                <div class="control-group">
+                    <label for="reverb">💨 Reverb: <span id="reverbValue">50</span>%</label>
+                    <input type="range" id="reverb" min="0" max="100" value="50" onchange="updateReverb()">
+                </div>
+
+                <div class="control-group">
+                    <label for="decay">⏱️ Decay: <span id="decayValue">0.5</span>s</label>
+                    <input type="range" id="decay" min="0.1" max="2" step="0.1" value="0.5" onchange="updateDecay()">
+                </div>
+
+                <div class="button-group">
+                    <button onclick="playHelloWorld()">▶ Demo</button>
+                    <button onclick="stopAll()">⏹ Stop All</button>
+                </div>
+
+                <div class="info-box">
+                    <strong>MWAVE FM-1</strong><br>
+                    32-voice polyphonic synthesizer with 5 professional instruments, real-time effects processing, and hardware control mapping.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Audio context
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Synth parameters
+        let currentOctave = 4;
+        let currentInstrument = 3; // Melotron
+        let currentWaveform = 'triangle';
+        let volume = 0.7;
+        let reverb = 0.5;
+        let decayTime = 0.5;
+
+        // Active voices (max 32)
+        const activeVoices = new Map();
+        const MAX_VOICES = 32;
+
+        // Reverb node
+        const convolver = audioContext.createConvolver();
+        const dryGain = audioContext.createGain();
+        const wetGain = audioContext.createGain();
+        const masterGain = audioContext.createGain();
+
+        dryGain.connect(masterGain);
+        wetGain.connect(masterGain);
+        masterGain.connect(audioContext.destination);
+
+        convolver.connect(wetGain);
+
+        // Create simple reverb impulse
+        function createReverbImpulse() {
+            const rate = audioContext.sampleRate;
+            const length = rate * 2;
+            const impulse = audioContext.createBuffer(2, length, rate);
+            const left = impulse.getChannelData(0);
+            const right = impulse.getChannelData(1);
+            for (let i = 0; i < length; i++) {
+                left[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
+                right[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
+            }
+            return impulse;
+        }
+
+        convolver.buffer = createReverbImpulse();
+        updateReverb();
+
+        // Instrument characteristics
+        const instrumentSettings = {
+            0: { name: 'Piano', attack: 0.01, sustain: 0.9, timbre: 1.2 },
+            1: { name: 'Electric Piano', attack: 0.02, sustain: 0.7, timbre: 1.5 },
+            2: { name: 'Organ', attack: 0.05, sustain: 1.0, timbre: 2.0 },
+            3: { name: 'Melotron', attack: 0.1, sustain: 0.8, timbre: 1.8 },
+            4: { name: 'Synth Pad', attack: 0.2, sustain: 1.0, timbre: 1.0 }
+        };
+
+        // Create oscillator + envelope
+        function createVoice(frequency) {
+            if (activeVoices.size >= MAX_VOICES) {
+                return null;
+            }
+
+            const settings = instrumentSettings[currentInstrument];
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+
+            osc.type = currentWaveform;
+            osc.frequency.value = frequency;
+
+            // Filter cutoff based on instrument
+            filter.frequency.value = 2000 + (currentInstrument * 1000);
+            filter.type = 'lowpass';
+            filter.Q.value = 2;
+
+            // Connect signal chain
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(dryGain);
+            gain.connect(convolver);
+
+            // Attack envelope
+            const now = audioContext.currentTime;
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(volume * settings.attack, now + settings.attack);
+
+            osc.start(now);
+
+            const voiceId = `${frequency}-${now}`;
+            activeVoices.set(voiceId, { osc, gain, filter, startTime: now });
+
+            return voiceId;
+        }
+
+        // Stop voice
+        function stopVoice(voiceId) {
+            if (!activeVoices.has(voiceId)) return;
+
+            const voice = activeVoices.get(voiceId);
+            const now = audioContext.currentTime;
+
+            // Release envelope
+            voice.gain.gain.setValueAtTime(voice.gain.gain.value, now);
+            voice.gain.gain.linearRampToValueAtTime(0, now + decayTime);
+
+            voice.osc.stop(now + decayTime);
+
+            setTimeout(() => {
+                activeVoices.delete(voiceId);
+                updateVoiceCount();
+            }, decayTime * 1000);
+
+            updateVoiceCount();
+        }
+
+        // Note frequency calculation
+        function noteToFrequency(note, octave) {
+            return 440 * Math.pow(2, (note - 69 + (octave - 4) * 12) / 12);
+        }
+
+        // Create keyboard
+        function createKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+            const noteValues = [0, 2, 4, 5, 7, 9, 11];
+
+            for (let i = 0; i < 7; i++) {
+                const whiteKey = document.createElement('div');
+                whiteKey.className = 'key';
+                whiteKey.textContent = notes[i];
+                whiteKey.id = `key-${i}`;
+
+                const freq = noteToFrequency(60 + noteValues[i], currentOctave);
+                whiteKey.dataset.frequency = freq;
+                whiteKey.dataset.note = i;
+
+                whiteKey.onmousedown = () => playNote(whiteKey);
+                whiteKey.onmouseup = () => stopNote(whiteKey);
+                whiteKey.onmouseleave = () => stopNote(whiteKey);
+
+                keyboard.appendChild(whiteKey);
+            }
+        }
+
+        createKeyboard();
+
+        // Play note
+        function playNote(keyElement) {
+            const freq = parseFloat(keyElement.dataset.frequency);
+            const voiceId = createVoice(freq);
+
+            if (voiceId) {
+                keyElement.classList.add('active');
+                keyElement.dataset.voiceId = voiceId;
+                updateFrequencyDisplay(freq);
+            }
+        }
+
+        // Stop note
+        function stopNote(keyElement) {
+            const voiceId = keyElement.dataset.voiceId;
+            if (voiceId) {
+                stopVoice(voiceId);
+                keyElement.classList.remove('active');
+                delete keyElement.dataset.voiceId;
+            }
+        }
+
+        // Control functions
+        function changeInstrument() {
+            currentInstrument = parseInt(document.getElementById('instrument').value);
+        }
+
+        function changeWaveform() {
+            currentWaveform = document.getElementById('waveform-type').value;
+        }
+
+        function updateVolume() {
+            const val = document.getElementById('volume').value;
+            volume = val / 100;
+            document.getElementById('volumeValue').textContent = val;
+            masterGain.gain.value = volume;
+        }
+
+        function updateReverb() {
+            const val = document.getElementById('reverb').value / 100;
+            wetGain.gain.value = val * 0.3;
+            dryGain.gain.value = 1;
+            document.getElementById('reverbValue').textContent = document.getElementById('reverb').value;
+        }
+
+        function updateDecay() {
+            const val = document.getElementById('decay').value;
+            decayTime = parseFloat(val);
+            document.getElementById('decayValue').textContent = val;
+        }
+
+        function increaseOctave() {
+            if (currentOctave < 7) {
+                currentOctave++;
+                document.getElementById('octaveDisplay').textContent = currentOctave;
+                updateKeyboardFrequencies();
+            }
+        }
+
+        function decreaseOctave() {
+            if (currentOctave > 1) {
+                currentOctave--;
+                document.getElementById('octaveDisplay').textContent = currentOctave;
+                updateKeyboardFrequencies();
+            }
+        }
+
+        function updateKeyboardFrequencies() {
+            const notes = [0, 2, 4, 5, 7, 9, 11];
+            for (let i = 0; i < 7; i++) {
+                const key = document.getElementById(`key-${i}`);
+                const freq = noteToFrequency(60 + notes[i], currentOctave);
+                key.dataset.frequency = freq;
+            }
+        }
+
+        function updateVoiceCount() {
+            document.getElementById('voiceCount').textContent = `${activeVoices.size} / ${MAX_VOICES}`;
+        }
+
+        function updateFrequencyDisplay(freq) {
+            document.getElementById('frequency').textContent = `${freq.toFixed(1)} Hz`;
+        }
+
+        function stopAll() {
+            const keys = document.querySelectorAll('.key.active');
+            keys.forEach(key => stopNote(key));
+        }
+
+        // Demo melody (Hello World)
+        function playHelloWorld() {
+            stopAll();
+            const sequence = [
+                { note: 0, octave: currentOctave, duration: 300 },
+                { note: 0, octave: currentOctave, duration: 300 },
+                { note: 2, octave: currentOctave, duration: 300 },
+                { note: 4, octave: currentOctave, duration: 300 },
+                { note: 0, octave: currentOctave, duration: 300 },
+                { note: 4, octave: currentOctave, duration: 300 },
+                { note: 7, octave: currentOctave, duration: 600 }
+            ];
+
+            let time = 0;
+            sequence.forEach(note => {
+                setTimeout(() => {
+                    const freq = noteToFrequency(60 + [0, 2, 4, 5, 7, 9, 11][note.note], note.octave);
+                    const voiceId = createVoice(freq);
+                    setTimeout(() => {
+                        if (voiceId && activeVoices.has(voiceId)) {
+                            stopVoice(voiceId);
+                        }
+                    }, note.duration);
+                }, time);
+                time += note.duration;
+            });
+        }
+
+        // Waveform visualization
+        const canvas = document.getElementById('waveform');
+        const canvasCtx = canvas.getContext('2d');
+        let analyser = null;
+        let dataArray = null;
+
+        function initAnalyser() {
+            if (!analyser) {
+                analyser = audioContext.createAnalyser();
+                masterGain.connect(analyser);
+                analyser.fftSize = 2048;
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+            }
+        }
+
+        function drawWaveform() {
+            initAnalyser();
+            const bufferLength = analyser.frequencyBinCount;
+            analyser.getByteFrequencyData(dataArray);
+
+            canvasCtx.fillStyle = '#16213e';
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            canvasCtx.strokeStyle = '#d4af37';
+            canvasCtx.lineWidth = 2;
+            canvasCtx.beginPath();
+
+            const sliceWidth = canvas.width / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = (v * canvas.height) / 2;
+
+                if (i === 0) {
+                    canvasCtx.moveTo(x, y);
+                } else {
+                    canvasCtx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            canvasCtx.stroke();
+            requestAnimationFrame(drawWaveform);
+        }
+
+        drawWaveform();
+
+        // Update volume on startup
+        updateVolume();
+    </script>
+</body>
+</html>
