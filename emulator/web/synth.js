@@ -356,7 +356,69 @@ function changeInstrument() {
     currentInstrument = parseInt(document.getElementById('instrument').value);
     const names = ['Piano', 'Electric Piano', 'Organ', 'Melotron', 'Synth Pad'];
     document.getElementById('instrumentDisplay').textContent = names[currentInstrument];
+
+    // Toggle organ mode
+    if (currentInstrument === 2) { // Organ
+        document.body.classList.add('organ-mode');
+        initOrganControls();
+    } else {
+        document.body.classList.remove('organ-mode');
+    }
+
     updateOledScreen();
+}
+
+// Initialize organ-specific controls
+function initOrganControls() {
+    // Populate organ preset selector
+    populateOrganPresetDropdown();
+
+    // Setup Leslie buttons
+    const leslieBtns = document.querySelectorAll('.leslie-btn');
+    leslieBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            leslieBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            console.log(`Leslie: ${e.target.dataset.leslie}`);
+        });
+    });
+
+    // Setup Organ Fader value displays
+    const organFaders = document.querySelectorAll('#organFadersSection .fader');
+    organFaders.forEach(fader => {
+        fader.addEventListener('input', (e) => {
+            const container = e.target.parentElement;
+            const valueDisplay = container.querySelector('.fader-value');
+            if (valueDisplay) {
+                valueDisplay.textContent = e.target.value + '%';
+            }
+        });
+    });
+
+    // Setup Overdrive slider
+    const overdriveSlider = document.getElementById('organOverdrive');
+    if (overdriveSlider) {
+        overdriveSlider.addEventListener('input', (e) => {
+            document.getElementById('overdriveValue').textContent = e.target.value + '%';
+        });
+    }
+}
+
+// Populate organ preset dropdown with organ presets only
+function populateOrganPresetDropdown() {
+    const dropdown = document.getElementById('organPresetSelector');
+    if (!dropdown) return;
+
+    dropdown.innerHTML = '<option value="">-- Load Preset --</option>';
+
+    const organPresets = allPresets.filter(p => p.instrument === 'Organ');
+
+    organPresets.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.textContent = `${p.name} (${p.artist})`;
+        dropdown.appendChild(option);
+    });
 }
 
 function changeWaveform() {

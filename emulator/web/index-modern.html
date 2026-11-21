@@ -514,6 +514,119 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
+        /* Organ Mode Styles */
+        body.organ-mode .knobs-section,
+        body.organ-mode .buttons-section,
+        body.organ-mode .waveform-display {
+            display: none !important;
+        }
+
+        body.organ-mode .keyboard-section {
+            display: block !important;
+        }
+
+        body.organ-mode .faders-section {
+            order: -1;
+            margin-top: 0;
+        }
+
+        body.organ-mode .main-layout {
+            display: none;
+        }
+
+        body.organ-mode .right-panel {
+            display: none;
+        }
+
+        /* Keep preset selector visible in organ mode */
+        body.organ-mode .panel-section:first-child {
+            display: block !important;
+        }
+
+        .organ-controls-section {
+            display: none;
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        body.organ-mode .organ-controls-section {
+            display: block;
+        }
+
+        .register-label {
+            color: #00ff88;
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .leslie-overdrive-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .leslie-control,
+        .overdrive-control {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid #00ff88;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .leslie-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .leslie-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+
+        .leslie-btn.active {
+            background: #00ff88;
+            color: #0a0e27;
+            font-weight: bold;
+        }
+
+        .leslie-btn:hover {
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .overdrive-slider-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .overdrive-slider-container input {
+            flex: 1;
+        }
+
+        .overdrive-value {
+            color: #00ff88;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -564,6 +677,82 @@
 
         <div class="waveform-display">
             <canvas id="waveform"></canvas>
+        </div>
+
+        <!-- ORGAN MODE CONTROLS -->
+        <div class="organ-controls-section" id="organControls">
+            <div class="panel-title">⭐ Organ Presets</div>
+            <select id="organPresetSelector" onchange="handlePresetChange()" style="width: 100%; padding: 8px; margin-bottom: 15px; background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88;">
+                <option value="">-- Load Preset --</option>
+            </select>
+            <div id="organPresetInfo" style="color: #00ff88; font-size: 0.75em; padding: 8px; background: rgba(0, 255, 136, 0.05); border: 1px solid #00ff88; border-radius: 5px; text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <span style="opacity: 0.6;">Select an organ preset</span>
+            </div>
+
+            <div class="panel-title">🎹 Organ Expression Registers</div>
+
+            <div class="faders-section" id="organFadersSection">
+                <div class="faders-grid">
+                    <div class="fader-group">
+                        <div class="register-label">Draw</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="0">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Flute</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="1">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Reed</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="2">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Perc</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="3">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Bright</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="4">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Swell</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="5">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Sustain</div>
+                        <input type="range" class="fader" min="0" max="100" value="0" data-fader="6">
+                        <span class="fader-value">0%</span>
+                    </div>
+                    <div class="fader-group">
+                        <div class="register-label">Master</div>
+                        <input type="range" class="fader" min="0" max="100" value="70" data-fader="7">
+                        <span class="fader-value">70%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leslie-overdrive-container">
+                <div class="leslie-control">
+                    <div class="register-label">Leslie Speaker</div>
+                    <div class="leslie-buttons">
+                        <button class="leslie-btn" data-leslie="slow">Slow</button>
+                        <button class="leslie-btn" data-leslie="off">Off</button>
+                        <button class="leslie-btn active" data-leslie="fast">Fast</button>
+                    </div>
+                </div>
+                <div class="overdrive-control">
+                    <div class="register-label">Overdrive Level</div>
+                    <div class="overdrive-slider-container">
+                        <input type="range" id="organOverdrive" min="0" max="100" value="0" style="flex: 1;">
+                        <span class="overdrive-value" id="overdriveValue">0%</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="main-layout">
