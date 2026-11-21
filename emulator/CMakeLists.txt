@@ -9,6 +9,8 @@ set(EMULATOR_SOURCES
   src/console_ui.cpp
   src/soundfont_loader.cpp
   src/melotron_synth.cpp
+  src/wav_sample_loader.cpp
+  src/sample_based_synth.cpp
 )
 
 set(EMULATOR_HEADERS
@@ -18,6 +20,8 @@ set(EMULATOR_HEADERS
   src/console_ui.h
   src/soundfont_loader.h
   src/melotron_synth.h
+  src/wav_sample_loader.h
+  src/sample_based_synth.h
 )
 
 # Executable
@@ -57,6 +61,8 @@ if(GTEST_FOUND)
     src/soundfont_loader.cpp
     src/melotron_synth.cpp
     src/audio_output.cpp
+    src/wav_sample_loader.cpp
+    src/sample_based_synth.cpp
   )
 
   target_compile_features(mwave_core PRIVATE cxx_std_17)
@@ -90,9 +96,18 @@ if(GTEST_FOUND)
     ${CMAKE_SOURCE_DIR}/firmware/include
   )
 
+  add_executable(test_wav_samples tests/test_wav_samples.cpp)
+  target_link_libraries(test_wav_samples mwave_core GTest::GTest GTest::Main)
+  target_compile_features(test_wav_samples PRIVATE cxx_std_17)
+  target_include_directories(test_wav_samples PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/firmware/include
+  )
+
   add_test(NAME SF2Extraction COMMAND test_sf2_extraction)
   add_test(NAME PitchShifting COMMAND test_pitch_shifting)
   add_test(NAME LoopHandling COMMAND test_loop_handling)
+  add_test(NAME WavSamples COMMAND test_wav_samples)
 
   message(STATUS "GoogleTest found - tests enabled")
 else()

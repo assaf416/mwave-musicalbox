@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWAVE FM-1 - Hardware Synthesizer Emulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0d1427 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #252d4a 50%, #1a1f3a 100%);
+            border-radius: 20px;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.3), inset 0 0 60px rgba(0, 255, 136, 0.05);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 95vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #00ff88;
+            font-size: 2.5em;
+            text-shadow: 0 0 20px #00ff88;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #00ff88;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        .display-panel {
+            background: #0a0e27;
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .display-item {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid #00ff88;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .display-label {
+            color: #00ff88;
+            font-size: 0.7em;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+
+        .display-value {
+            color: #00ff88;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .waveform-display {
+            background: #0a0e27;
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            height: 150px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 250px;
+            gap: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .keyboard-section {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .keyboard-title {
+            color: #00ff88;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .keyboard {
+            display: flex;
+            gap: 1px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding: 5px;
+            background: #0a0e27;
+            border-radius: 5px;
+        }
+
+        .key {
+            width: 45px;
+            height: 120px;
+            background: linear-gradient(135deg, #2a2f4a 0%, #1a1f3a 100%);
+            border: 1px solid #00ff88;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.65em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 3px;
+            transition: all 0.1s;
+            user-select: none;
+            flex-shrink: 0;
+            color: #00ff88;
+        }
+
+        .key:hover {
+            background: linear-gradient(135deg, #3a3f5a 0%, #2a2f4a 100%);
+            box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .key.active {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            color: #0a0e27;
+            font-weight: bold;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .knob-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .knob {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #00ff88 0deg,
+                #00ff88 calc(var(--rotation) * 1deg),
+                rgba(0, 255, 136, 0.2) calc(var(--rotation) * 1deg),
+                rgba(0, 255, 136, 0.2) 360deg
+            );
+            border: 2px solid #00ff88;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 136, 0.2);
+            transition: box-shadow 0.2s;
+        }
+
+        .knob::after {
+            content: '';
+            width: 3px;
+            height: 25px;
+            background: #00ff88;
+            position: absolute;
+            top: 5px;
+            border-radius: 2px;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .knob:hover {
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .knob:active {
+            cursor: grabbing;
+        }
+
+        .knob-label {
+            color: #00ff88;
+            font-size: 0.65em;
+            text-align: center;
+            height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .knob-value {
+            color: #00ff88;
+            font-size: 0.7em;
+            text-shadow: 0 0 5px #00ff88;
+        }
+
+        .faders-section {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .faders-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+        }
+
+        .fader-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .fader {
+            width: 40px;
+            height: 150px;
+            appearance: slider-vertical;
+            -webkit-appearance: slider-vertical;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 255, 136, 0.05) 100%);
+            border: 1px solid #00ff88;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .fader::-webkit-slider-thumb {
+            appearance: none;
+            width: 35px;
+            height: 15px;
+            background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
+            cursor: pointer;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .fader::-moz-range-thumb {
+            width: 35px;
+            height: 15px;
+            background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
+            cursor: pointer;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .fader-label {
+            color: #00ff88;
+            font-size: 0.6em;
+            text-align: center;
+        }
+
+        .buttons-section {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .hw-button {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #2a2f4a 0%, #1a1f3a 100%);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #00ff88;
+            font-size: 0.65em;
+            font-weight: bold;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .hw-button:hover {
+            background: linear-gradient(135deg, #3a3f5a 0%, #2a2f4a 100%);
+            box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .hw-button:active {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            color: #0a0e27;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-section {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .panel-title {
+            color: #00ff88;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 8px;
+            background: #0a0e27;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        select:focus, input[type="range"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .button-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            color: #0a0e27;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px #00ff88;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .octave-display {
+            text-align: center;
+            color: #00ff88;
+            font-size: 0.9em;
+            margin: 8px 0;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px #00ff88;
+            }
+            50% {
+                text-shadow: 0 0 20px #00ff88;
+            }
+        }
+
+        .header h1 {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .info-text {
+            color: #00ff88;
+            font-size: 0.65em;
+            opacity: 0.6;
+            margin-top: 10px;
+        }
+
+        .oled-screen-container {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .oled-screen {
+            width: 256px;
+            height: 128px;
+            background: #ffffff;
+            border: 8px solid #1a1a1a;
+            border-radius: 4px;
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.8),
+                inset 0 0 10px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #000000;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .oled-screen.on {
+            background: #ffffff;
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.8),
+                inset 0 0 10px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.5),
+                0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .oled-screen.off {
+            background: #0a0a0a;
+            color: #333333;
+        }
+
+        .oled-screen-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            text-align: center;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .oled-screen-status {
+            color: #00ff88;
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .screen-label {
+            color: #00ff88;
+            font-size: 0.75em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ MWAVE FM-1</h1>
+            <p>32-Voice Polyphonic Synthesizer Emulator</p>
+        </div>
+
+        <!-- 1.54" OLED SCREEN -->
+        <div class="oled-screen-container">
+            <div class="screen-label">1.54" OLED Display</div>
+            <div class="oled-screen on" id="oledScreen">
+                <div class="oled-screen-content" id="oledContent">
+                    MWAVE FM-1
+                    Ready
+                </div>
+            </div>
+            <div class="oled-screen-status" id="screenStatus">● ACTIVE</div>
+        </div>
+
+        <div class="display-panel">
+            <div class="display-item">
+                <div class="display-label">Instrument</div>
+                <div class="display-value" id="instrumentDisplay">Melotron</div>
+            </div>
+            <div class="display-item">
+                <div class="display-label">Voices</div>
+                <div class="display-value" id="voiceDisplay">0 / 32</div>
+            </div>
+            <div class="display-item">
+                <div class="display-label">Frequency</div>
+                <div class="display-value" id="freqDisplay">-</div>
+            </div>
+            <div class="display-item">
+                <div class="display-label">Master Volume</div>
+                <div class="display-value" id="volumeDisplay">70%</div>
+            </div>
+            <div class="display-item">
+                <div class="display-label">Reverb</div>
+                <div class="display-value" id="reverbDisplay">50%</div>
+            </div>
+            <div class="display-item">
+                <div class="display-label">Sample Rate</div>
+                <div class="display-value">48 kHz</div>
+            </div>
+        </div>
+
+        <div class="waveform-display">
+            <canvas id="waveform"></canvas>
+        </div>
+
+        <div class="main-layout">
+            <div>
+                <!-- KEYBOARD -->
+                <div class="keyboard-section">
+                    <div class="keyboard-title">Dynamic Keyboard</div>
+                    <div class="keyboard" id="keyboard"></div>
+                    <div class="octave-display">Octave: <span id="octaveNum">4</span></div>
+                    <div class="button-row">
+                        <button onclick="decreaseOctave()">◀ OCT</button>
+                        <button onclick="increaseOctave()">OCT ▶</button>
+                    </div>
+                </div>
+
+                <!-- KNOBS SECTION - 16 Knobs (CC#20-35) -->
+                <div class="controls-grid">
+                    <div class="knob-group">
+                        <div class="knob" id="knob0" style="--rotation: 0"></div>
+                        <div class="knob-label">CC20<br>Filter</div>
+                        <div class="knob-value" id="knob0Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob1" style="--rotation: 0"></div>
+                        <div class="knob-label">CC21<br>Resonance</div>
+                        <div class="knob-value" id="knob1Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob2" style="--rotation: 0"></div>
+                        <div class="knob-label">CC22<br>Attack</div>
+                        <div class="knob-value" id="knob2Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob3" style="--rotation: 0"></div>
+                        <div class="knob-label">CC23<br>Decay</div>
+                        <div class="knob-value" id="knob3Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob4" style="--rotation: 0"></div>
+                        <div class="knob-label">CC24<br>Sustain</div>
+                        <div class="knob-value" id="knob4Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob5" style="--rotation: 0"></div>
+                        <div class="knob-label">CC25<br>Release</div>
+                        <div class="knob-value" id="knob5Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob6" style="--rotation: 0"></div>
+                        <div class="knob-label">CC26<br>LFO Amt</div>
+                        <div class="knob-value" id="knob6Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob7" style="--rotation: 0"></div>
+                        <div class="knob-label">CC27<br>LFO Rate</div>
+                        <div class="knob-value" id="knob7Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob8" style="--rotation: 0"></div>
+                        <div class="knob-label">CC28<br>Vibrato</div>
+                        <div class="knob-value" id="knob8Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob9" style="--rotation: 0"></div>
+                        <div class="knob-label">CC29<br>Tremolo</div>
+                        <div class="knob-value" id="knob9Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob10" style="--rotation: 0"></div>
+                        <div class="knob-label">CC30<br>Pan</div>
+                        <div class="knob-value" id="knob10Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob11" style="--rotation: 0"></div>
+                        <div class="knob-label">CC31<br>Tuning</div>
+                        <div class="knob-value" id="knob11Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob12" style="--rotation: 0"></div>
+                        <div class="knob-label">CC32<br>Env Amt</div>
+                        <div class="knob-value" id="knob12Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob13" style="--rotation: 0"></div>
+                        <div class="knob-label">CC33<br>Chorus</div>
+                        <div class="knob-value" id="knob13Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob14" style="--rotation: 0"></div>
+                        <div class="knob-label">CC34<br>Phaser</div>
+                        <div class="knob-value" id="knob14Val">0%</div>
+                    </div>
+                    <div class="knob-group">
+                        <div class="knob" id="knob15" style="--rotation: 0"></div>
+                        <div class="knob-label">CC35<br>Delay</div>
+                        <div class="knob-value" id="knob15Val">0%</div>
+                    </div>
+                </div>
+
+                <!-- FADERS SECTION - 8 Faders (CC#36-43) -->
+                <div class="faders-section">
+                    <div class="keyboard-title">Expression Faders</div>
+                    <div class="faders-grid">
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader0" onchange="updateFader(0)">
+                            <div class="fader-label">CC36</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader1" onchange="updateFader(1)">
+                            <div class="fader-label">CC37</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader2" onchange="updateFader(2)">
+                            <div class="fader-label">CC38</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader3" onchange="updateFader(3)">
+                            <div class="fader-label">CC39</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader4" onchange="updateFader(4)">
+                            <div class="fader-label">CC40</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader5" onchange="updateFader(5)">
+                            <div class="fader-label">CC41</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader6" onchange="updateFader(6)">
+                            <div class="fader-label">CC42</div>
+                        </div>
+                        <div class="fader-group">
+                            <input type="range" class="fader" min="0" max="100" value="0" id="fader7" onchange="updateFader(7)">
+                            <div class="fader-label">CC43</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUTTONS SECTION - 16 Buttons -->
+                <div class="buttons-section">
+                    <div class="keyboard-title">Control Buttons (Note-based)</div>
+                    <div class="buttons-grid">
+                        <div class="hw-button" onclick="pressButton(0)">BTN 1</div>
+                        <div class="hw-button" onclick="pressButton(1)">BTN 2</div>
+                        <div class="hw-button" onclick="pressButton(2)">BTN 3</div>
+                        <div class="hw-button" onclick="pressButton(3)">BTN 4</div>
+                        <div class="hw-button" onclick="pressButton(4)">BTN 5</div>
+                        <div class="hw-button" onclick="pressButton(5)">BTN 6</div>
+                        <div class="hw-button" onclick="pressButton(6)">BTN 7</div>
+                        <div class="hw-button" onclick="pressButton(7)">BTN 8</div>
+                        <div class="hw-button" onclick="pressButton(8)">BTN 9</div>
+                        <div class="hw-button" onclick="pressButton(9)">BTN 10</div>
+                        <div class="hw-button" onclick="pressButton(10)">BTN 11</div>
+                        <div class="hw-button" onclick="pressButton(11)">BTN 12</div>
+                        <div class="hw-button" onclick="pressButton(12)">BTN 13</div>
+                        <div class="hw-button" onclick="pressButton(13)">BTN 14</div>
+                        <div class="hw-button" onclick="pressButton(14)">BTN 15</div>
+                        <div class="hw-button" onclick="pressButton(15)">BTN 16</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <div class="panel-section">
+                    <div class="panel-title">🎵 Instrument</div>
+                    <select id="instrument" onchange="changeInstrument()">
+                        <option value="0">Piano</option>
+                        <option value="1">E-Piano</option>
+                        <option value="2">Organ</option>
+                        <option value="3" selected>Melotron</option>
+                        <option value="4">Synth Pad</option>
+                    </select>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-title">〰️ Waveform</div>
+                    <select id="waveform" onchange="changeWaveform()">
+                        <option value="sine">Sine</option>
+                        <option value="triangle" selected>Triangle</option>
+                        <option value="square">Square</option>
+                        <option value="sawtooth">Sawtooth</option>
+                    </select>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-title">🔊 Master Volume</div>
+                    <input type="range" id="volume" min="0" max="100" value="70" onchange="updateVolume()">
+                    <div class="display-value" style="text-align: center; margin-top: 8px;" id="volPercent">70%</div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-title">💨 Reverb</div>
+                    <input type="range" id="reverb" min="0" max="100" value="50" onchange="updateReverb()">
+                    <div class="display-value" style="text-align: center; margin-top: 8px;" id="revPercent">50%</div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-title">⏱️ Decay Time</div>
+                    <input type="range" id="decay" min="0.1" max="2" step="0.1" value="0.5" onchange="updateDecay()">
+                    <div class="display-value" style="text-align: center; margin-top: 8px;" id="decayPercent">0.5s</div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-title">🎮 Actions</div>
+                    <div class="button-row">
+                        <button onclick="playDemo()">▶ Demo</button>
+                        <button onclick="stopAll()">⏹ Stop</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="info-text">
+                        ⚡ FM-1 Synthesizer<br>
+                        32-voice polyphony<br>
+                        16 knobs, 8 faders, 16 buttons<br>
+                        Real-time synthesis<br>
+                        Professional effects
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="synth.js"></script>
+</body>
+</html>
