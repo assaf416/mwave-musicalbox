@@ -130,30 +130,54 @@ void MelotronSynth::processTapePlayback(Voice& voice, float* buffer, int numSamp
   if (!instrument) return;
 
   Sample* sample = soundFont->getSampleForNote(instrument, voice.midiNote);
-  if (!sample || sample->data.empty()) {
-    std::cerr << "[MelotronSynth] No sample data for note " << (int)voice.midiNote << "\n";
+  if (!sample || sample->data.empty() || !sample->valid) {
+    std::cerr << "[MelotronSynth] No valid sample data for note " << (int)voice.midiNote << "\n";
     voice.active = false;
     return;
   }
 
-  // Calculate pitch shift based on MIDI note
+  // Calculate pitch shift: playback_rate = 2^((MIDI_note - original_pitch) / 12)
   int originalPitch = sample->originalPitch;
   int semitoneDiff = voice.midiNote - originalPitch;
   voice.pitchShift = std::pow(2.0f, semitoneDiff / 12.0f);
 
-  // Generate samples
+  uint32_t loopStart = sample->startLoop;
+  uint32_t loopEnd = sample->endLoop;
+  uint32_t sampleLength = sample->data.size();
+  bool hasLoop = (loopEnd > loopStart) && (loopEnd <= sampleLength);
+
   for (int i = 0; i < numSamples; ++i) {
+    if (!voice.active) break;
+
     // Update envelope (attack/release)
     if (voice.amplitude < 1.0f) {
       voice.amplitude += (1.0f / (voice.attackTime * 48000.0f));
       voice.amplitude = std::min(1.0f, voice.amplitude);
     }
 
-    // Get sample from tape
-    int sampleIndex = (int)(voice.position * sample->data.size());
-    sampleIndex = std::clamp(sampleIndex, 0, (int)sample->data.size() - 1);
+    // Convert normalized position (0-1) to sample index
+    float samplePos = voice.position * sampleLength;
 
+    // Handle looping
+    if (hasLoop && samplePos >= loopEnd) {
+      float loopLength = loopEnd - loopStart;
+      samplePos = loopStart + std::fmod(samplePos - loopStart, loopLength);
+    }
+
+    uint32_t sampleIndex = (uint32_t)samplePos;
+    if (sampleIndex >= sampleLength) {
+      voice.active = false;
+      break;
+    }
+
+    // Linear interpolation for smooth pitch shifting
+    float frac = samplePos - sampleIndex;
     float sample_value = sample->data[sampleIndex];
+
+    if (sampleIndex + 1 < sampleLength) {
+      float nextSample = sample->data[sampleIndex + 1];
+      sample_value = sample_value * (1.0f - frac) + nextSample * frac;
+    }
 
     // Apply tape saturation
     sample_value = applySaturation(sample_value, tapeSaturation);
@@ -164,16 +188,15 @@ void MelotronSynth::processTapePlayback(Voice& voice, float* buffer, int numSamp
     // Apply reverb
     sample_value = applyReverb(sample_value, reverbAmount);
 
-    // Add to output buffer
-    buffer[i] += sample_value;
+    // Add to output buffer (clamp to prevent clipping)
+    buffer[i] += std::clamp(sample_value, -1.0f, 1.0f);
 
-    // Advance tape position
+    // Advance tape position with pitch shift
     voice.position += (voice.pitchShift / 48000.0f);
 
-    // Check if tape has finished playing
-    if (voice.position >= 1.0f) {
+    // Check if tape has finished (without looping)
+    if (!hasLoop && voice.position >= 1.0f) {
       voice.active = false;
-      std::cout << "[MelotronSynth] Tape finished for note " << (int)voice.midiNote << "\n";
       break;
     }
   }
